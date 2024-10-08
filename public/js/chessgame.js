@@ -1,6 +1,7 @@
 const socket = io();
 const chess = new Chess();
 const boardElement = document.querySelector(".chessBoard");
+const button = document.querySelector(".btn");
 let draggedPiece = null;
 let sourceSquare = null;
 let playerRole = null;
@@ -10,7 +11,7 @@ const renderBoard = () => {
   boardElement.innerHTML = "";
   board.forEach((value, valueIndex) => {
     value.forEach((square, squareIndex) => {
-      const squareElement = document.createElement("div");
+      var squareElement = document.createElement("div");
       squareElement.classList.add(
         "square",
         (valueIndex + squareIndex) % 2 == 0 ? "light" : "dark"
@@ -54,6 +55,7 @@ const renderBoard = () => {
       boardElement.appendChild(squareElement);
     });
   });
+
   if (playerRole === "b") {
     boardElement.classList.add("flipped");
   } else {
@@ -103,8 +105,20 @@ socket.on("move", (move) => {
 });
 socket.on("invalid", (invalid) => {
   alert(invalid);
+  renderBoard();
 });
 socket.on("InvalidMove", (err) => {
   alert(err);
+  renderBoard();
+});
+socket.on("con", (confirmation) => {
+  boardElement.style.display = "grid";
+  alert(confirmation);
+  renderBoard();
+  const start = confirm("Start the Game!!");
+  if (!start) {
+    boardElement.style.display = "none";
+    button.classList.add("btn2");
+  }
 });
 renderBoard();

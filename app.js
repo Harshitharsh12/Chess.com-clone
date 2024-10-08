@@ -17,6 +17,7 @@ app.get("/", (req, res) => {
   res.render("index", { title: "Chess Game ♟️♟️♟️" });
 });
 io.on("connection", (uniqueSocket) => {
+  uniqueSocket.emit("con", "You are now Connected!!");
   console.log(`${uniqueSocket.id} id user connected`);
   if (!players.white) {
     players.white = uniqueSocket.id;
